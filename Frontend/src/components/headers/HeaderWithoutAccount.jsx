@@ -19,9 +19,6 @@ const HeaderWithoutAccount = () => {
 
                 <div className="flex items-center space-x-10 text-md">
                     <a href="#" className="hover:undeline">Log In</a>
-                    <button className="bg-blue-600 text-white px-4 py-1 5 rounded-lg hover:bg-blue-700 transition">
-                        Sign Up
-                    </button>
                 </div>
             </div>
         </header>
