@@ -26,5 +26,6 @@ dist-ssr
 
 pnpm-lock.yaml
 yarn.lock
+firebase.json
 package-lock.json
 bun.lockb
