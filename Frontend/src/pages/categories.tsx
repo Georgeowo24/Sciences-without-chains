@@ -9,6 +9,17 @@ export default function CategoriesPage() {
         {/* Título de categoría */}
         <h1 className={`${title()} mb-10 text-center`}>CATEGORY NAME</h1>
 
+        <Button
+          as={Link}
+          href="/uploadDocs"
+          color="primary"
+          variant="shadow"
+          size="md"
+          className="mb-8"
+        >
+          Upload a new document
+        </Button>
+
         {/* Grid de tarjetas */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-6xl w-full">
           {Array.from({ length: 6 }).map((_, index) => (
