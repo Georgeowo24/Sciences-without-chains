@@ -12,7 +12,7 @@ export default function Footer() {
                 </ul>
                 <ul className="text-xs list-none mt-1 text-left">
                     <li>Morales Alvarado Carlos</li>
-                    <li>Hernández Bonilla Cristian</li>                
+                    <li>Hernández Bonilla Cristian</li>
                 </ul>
             </div>
             </div>
