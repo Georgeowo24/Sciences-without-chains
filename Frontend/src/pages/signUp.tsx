@@ -10,7 +10,8 @@ export default function SignUpPage() {
         
         {/* Welcome */}
         <div className="w-1/2 text-left pl-30">
-          <h1 className="text-5xl font-bold p-30 pb-10">Welcome Back!</h1>
+          <h1 className="text-5xl font-bold p-30 pb-10">Hello, Welcome!
+          </h1>
 
           <p className="pb-4">Already have an account?</p>          
             <Button
