@@ -9,15 +9,17 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@heroui/navbar";
-import { link as linkStyles } from "@heroui/theme";
-import clsx from "clsx";
+
+import {
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+} from "@heroui/dropdown";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import Logo from "./icons";
-
-
-
 
 export const Navbar = () => {
   return (
@@ -40,20 +42,63 @@ export const Navbar = () => {
         
         {/* Navigation Items */}
         <div className="hidden lg:flex gap-5 justify-start ml-10">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <Link
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            </NavbarItem>
-          ))}
+          {siteConfig.navItems.map((item) => {
+            // If the item is "Categories", render a dropdown
+            if (item.label === "Categories") {
+              return (
+                <Dropdown key="categories">
+                  <NavbarItem>
+                    <DropdownTrigger>
+                      <Button
+                        disableRipple
+                        className="bg-transparent p-0 text-foreground hover:text-primary"
+                        radius="sm"
+                        variant="light"
+                      >
+                        Categories
+                      </Button>
+                    </DropdownTrigger>
+                  </NavbarItem>
+                  <DropdownMenu
+                    aria-label="Category menu"
+                    itemClasses={{
+                      base: "py-1 px-3 text-sm",
+                    }}
+                  >
+                    <DropdownItem key="all" href="/categories">
+                      All
+                    </DropdownItem>
+                    <DropdownItem key="science" href="/categories/science">
+                      Science
+                    </DropdownItem>
+                    <DropdownItem key="technology" href="/categories/technology">
+                      Technology
+                    </DropdownItem>
+                    <DropdownItem key="biology" href="/categories/biology">
+                      Biology
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              );
+            }
+
+            // For other items, render a normal button
+            return (
+              <NavbarItem key={item.href}>
+                <Button
+                  as={Link}
+                  href={item.href}
+                  variant="light"
+                  radius="sm"
+                  className="bg-transparent p-0 text-foreground hover:text-primary"
+                >
+                  {item.label}
+                </Button>
+              </NavbarItem>
+            );
+          })}
+
+
         </div>
       </NavbarContent>
 
@@ -65,7 +110,13 @@ export const Navbar = () => {
 
         {/* Log In */}
         <NavbarItem className="hidden md:flex">
-          <Button variant="light" radius="md">
+          <Button
+            as={Link}
+            href="/login"
+            variant="light"
+            radius="sm"
+            className="bg-transparent p-0 text-foreground hover:text-primary"
+          >
             Log In
           </Button>
         </NavbarItem>
