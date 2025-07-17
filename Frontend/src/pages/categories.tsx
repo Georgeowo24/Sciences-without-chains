@@ -1,8 +1,8 @@
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { StarIcon } from "lucide-react"; // Usamos íconos Lucide (puedes cambiarlo)
+import { Button, Link } from "@heroui/react";
 
-export default function DocsPage() {
+export default function CategoriesPage() {
   return (
     <DefaultLayout>
       <section className="flex rounded-2xl flex-col items-center py-12 px-4 md:px-10 bg-gray-100 dark:bg-gray-900 min-h-screen">
@@ -33,9 +33,15 @@ export default function DocsPage() {
                 </p>
                 {/* Estrellas */}
                 <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} size={16} className="text-gray-500 dark:text-gray-400" />
-                  ))}
+                  <Button 
+                  color = "primary"
+                  as={Link}
+                  href={"docs"}
+                  variant="shadow"
+                  radius="sm"
+                  >
+                    Ver documento
+                  </Button>
                 </div>
               </div>
             </div>
