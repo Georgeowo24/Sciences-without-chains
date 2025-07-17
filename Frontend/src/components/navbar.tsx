@@ -51,8 +51,8 @@ export const Navbar = () => {
                     <DropdownTrigger>
                       <Button
                         disableRipple
-                        className="bg-transparent p-0 text-foreground hover:text-primary"
-                        radius="sm"
+                        className="hover:text-primary"
+                        size="md"
                         variant="light"
                       >
                         Categories
@@ -89,8 +89,8 @@ export const Navbar = () => {
                   as={Link}
                   href={item.href}
                   variant="light"
-                  radius="sm"
-                  className="bg-transparent p-0 text-foreground hover:text-primary"
+                  size="md"
+                  className="hover:text-primary"
                 >
                   {item.label}
                 </Button>
@@ -114,8 +114,8 @@ export const Navbar = () => {
             as={Link}
             href="/login"
             variant="light"
-            radius="sm"
-            className="bg-transparent p-0 text-foreground hover:text-primary"
+            size="md"
+            className="hover:text-primary"
           >
             Log In
           </Button>
@@ -123,8 +123,15 @@ export const Navbar = () => {
 
         {/* Sign Up */}
         <NavbarItem className="hidden md:flex">
-          <Button color="primary" radius="md" variant="shadow">
-            Sign In
+          <Button
+            as={Link}
+            href="/signUp"
+            color="primary"
+            variant="shadow"
+            size="md"
+            
+          >
+            Sign Up
           </Button>
         </NavbarItem>
       </NavbarContent>
