@@ -30,7 +30,7 @@ export default function CategoriesPage() {
               {/* Icono PDF */}
               <div className="flex-shrink-0">
                 <img
-                  src="../public/pdf_icono.png"
+                  src="./pdf_icono.png"
                   alt="PDF Icon"
                   className="w-30 h-40"
                 />

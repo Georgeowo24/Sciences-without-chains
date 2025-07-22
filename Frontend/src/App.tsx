@@ -7,6 +7,7 @@ import CategoriesPage from "@/pages/categories";
 import DocsPage from "./pages/docs";
 import SignUpPage from "./pages/signUp";
 import UploadDocsPage from "./pages/uploadDocs";
+import HelpPage from "./pages/help";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route element={<DocsPage/>}  path="/docs"/>
       <Route element={<SignUpPage/>}  path="/signUp"/>
       <Route element={<UploadDocsPage/>}  path="/uploadDocs"/>
+      <Route element={<HelpPage/>}  path="/help"/>
     </Routes>
   );
 }

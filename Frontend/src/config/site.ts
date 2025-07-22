@@ -18,7 +18,7 @@ export const siteConfig = {
     },
     {
       label: "Help",
-      href: "/blog",
+      href: "/help",
     },
   ],
   navMenuItems: [
