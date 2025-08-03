@@ -36,8 +36,9 @@ class FileController {
             const direccionDoc = `/uploads/${file.name}`;
 
             const fileData = {
-                nombre: file.name,
+                nombre: req.body.nombre || file.name,
                 direccionDoc, // <-- ahora es la ruta pública
+                descripcion: req.body.descripcion || 'No description provided',
                 categoria: req.body.categoria
             };
 
