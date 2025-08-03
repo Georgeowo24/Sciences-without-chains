@@ -12,6 +12,7 @@ class FileModel implements IFileModel {
             id: docRef.id,
             categoria: fileData.categoria || '', // Asegura valor por defecto
             direccionDoc: fileData.direccionDoc || '',
+            descrpicion: fileData.descrpicion || '', // Asegura valor por defecto
             nombre: fileData.nombre || '',
             usuario: fileData.usuario || ''
         };
@@ -29,6 +30,7 @@ class FileModel implements IFileModel {
                 id: doc.id,
                 categoria: data.categoria || '', // Asegura valor por defecto
                 direccionDoc: data.direccionDoc || '',
+                descrpicion: data.descrpicion || '', // Asegura valor por defecto
                 nombre: data.nombre || '',
                 usuario: data.usuario || ''
             };
@@ -46,6 +48,7 @@ class FileModel implements IFileModel {
             id: doc.id,
             categoria: data?.categoria || '',
             direccionDoc: data?.direccionDoc || '',
+            descrpicion: data?.descrpicion || '', // Asegura valor por defecto
             nombre: data?.nombre || '',
             usuario: data?.usuario || ''
         };
@@ -61,6 +64,7 @@ class FileModel implements IFileModel {
             id: doc.id,
             categoria: doc.data().categoria,
             direccionDoc: doc.data().direccionDoc,
+            descrpicion: doc.data().descrpicion || '', // Asegura valor por defecto
             nombre: doc.data().nombre,
             usuario: doc.data().usuario
         }));
@@ -89,6 +93,7 @@ class FileModel implements IFileModel {
                 id: doc.id,
                 categoria: data.categoria || '', // Asegura valor por defecto
                 direccionDoc: data.direccionDoc || '',
+                descrpicion: data.descrpicion || '', // Asegura valor por defecto
                 nombre: data.nombre || '',
                 usuario: data.usuario || ''
             };
@@ -109,6 +114,7 @@ class FileModel implements IFileModel {
                 id: doc.id,
                 categoria: data.categoria || '', // Asegura valor por defecto
                 direccionDoc: data.direccionDoc || '',
+                descrpicion: data.descrpicion || '', // Asegura valor por defecto
                 nombre: data.nombre || '',
                 usuario: data.usuario || ''
             };
