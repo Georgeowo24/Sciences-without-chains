@@ -1,8 +1,41 @@
 import { Input, Button, Link } from "@heroui/react";
 import DefaultLayout from "@/layouts/default";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import app from '../firebase/firebase';
 
+interface SignUpFormData {
+  email: string;
+  password: string;
+}
+
+const auth = getAuth(app);
 
 export default function SignUpPage() {
+  const [form, setForm] = useState<SignUpFormData>({ email: "", password: "" });
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      await createUserWithEmailAndPassword(auth, form.email, form.password);
+      navigate("/"); // Redirige al home tras registro exitoso
+    } catch (err: any) {
+      setError("No se pudo crear el usuario. Intenta con otro correo.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <DefaultLayout>
       <div className="flex items-center justify-center">
@@ -33,12 +66,15 @@ export default function SignUpPage() {
               Sign Up
             </h2>
 
-            <form className="flex flex-col gap-6">
+            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
               <Input
                 isRequired
                 className="max-w-md"
                 label="Email"
                 type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
               />
 
               <Input
@@ -46,13 +82,22 @@ export default function SignUpPage() {
                 className="max-w-md"
                 label="Password"
                 type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
               />
               
+              {error && (
+                <div className="text-red-500 text-sm text-center">{error}</div>
+              )}
+
               <Button
                 color="primary"
                 variant="shadow"
                 size="lg"
                 className="mt-2 font-semibold"
+                type="submit"
+                isLoading={loading}
               >
                 Sign Up
               </Button>

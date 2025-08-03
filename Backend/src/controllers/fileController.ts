@@ -3,28 +3,53 @@ import FileProxy from '../proxies/fileProxy';
 import * as path from 'path';
 import { unlink } from 'fs/promises';
 
-
+// Importa el tipo UploadedFile de express-fileupload
+import { UploadedFile } from 'express-fileupload';
 
 class FileController {
     private uploadPath = path.join(__dirname, '../../uploads');
 
+    constructor() {
+        this.uploadFile = this.uploadFile.bind(this);
+        this.getUserFiles = this.getUserFiles.bind(this);
+        this.updateFile = this.updateFile.bind(this);
+        this.deleteFile = this.deleteFile.bind(this);
+    }
 
     async uploadFile(req: Request, res: Response): Promise<void> {
         try {
-            if (!req.body.file) res.status(400).send('Archivo no proporcionado');
-            
+            if (!req.files || !req.files.file || !req.body.categoria) {
+                res.status(400).send('Archivo no proporcionado');
+                return;
+            }
+
+            const file = req.files.file as UploadedFile;
+
+            // Asegúrate de que la carpeta exista (opcional)
+            // import { existsSync, mkdirSync } from 'fs';
+            // if (!existsSync(this.uploadPath)) mkdirSync(this.uploadPath, { recursive: true });
+
+            const uploadPath = path.join(this.uploadPath, file.name);
+            await file.mv(uploadPath);
+
+            // Guarda la ruta pública, no la absoluta
+            const direccionDoc = `/uploads/${file.name}`;
+
             const fileData = {
-                nombre: req.body.file.originalname,
-                direccionDoc: path.join(this.uploadPath, req.body.file.filename),
+                nombre: file.name,
+                direccionDoc, // <-- ahora es la ruta pública
                 categoria: req.body.categoria
             };
 
             const result = await FileProxy.uploadFile(fileData, req.body.user);
             res.status(201).json(result);
-            return ;
+            return;
         } catch (error) {
-            res.status(500).send('Error al subir archivo');
-            return ;
+            console.error('Error al subir archivo:', error);
+            if (!res.headersSent) {
+                res.status(500).send('Error al subir archivo');
+            }
+            return;
         }
     }
 

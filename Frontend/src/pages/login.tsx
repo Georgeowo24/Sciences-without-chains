@@ -1,27 +1,45 @@
 import { Input, Button, Link } from "@heroui/react";
-import { useForm } from 'react-hook-form';
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import app from '../firebase/firebase'
 import DefaultLayout from "@/layouts/default";
-import { useAuth } from "@/hooks/useAuth"; 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormData {
   email: string;
   password: string;
 }
 
+
+
+const auth = getAuth(app)
+
 export default function LoginPage() {
 
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
-  const { login } = useAuth();
-  const [error, setError] = useState('');
+  const [form, setForm] = useState<LoginFormData>({ email: "", password: "" });
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
 
-  const onSubmit = async (data: LoginFormData) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
-      await login(data.email, data.password);
-    } catch (err) {
-      setError('Credenciales inválidas');
+      await signInWithEmailAndPassword(auth, form.email, form.password);
+      navigate("/"); // Redirige al home tras login exitoso
+    } catch (err: any) {
+      setError("Credenciales incorrectas o usuario no encontrado.");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <DefaultLayout>
       <div className="flex items-center justify-center">
@@ -34,37 +52,41 @@ export default function LoginPage() {
               Log In
             </h2>
 
-            <form className="flex flex-col gap-6"  onSubmit={handleSubmit(onSubmit)}>
-              {error && <p className="pb-2 text-red-400">{error}</p>}
+            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
               <Input
                 isRequired
                 className="max-w-md"
                 label="Email"
                 type="email"
-                {...register('email', { required: 'Email es requerido' })}
-                isInvalid = {!!errors.email}
-                errorMessage={errors.email?.message}
+                name="email"
+                value={form.email}
+                onChange={handleChange}
               />
 
-              <Input
-                isRequired
-                className="max-w-md"
-                label="Password"
-                type="password"
-                {...register('password', { required: 'Contraseña es requerida' })}
-                isInvalid={!!errors.password}
-                errorMessage={errors.password?.message}
-              />
-              
-              <Button
-                color="primary"
-                variant="shadow"
-                size="lg"
-                type="submit"
-                className="mt-2 font-semibold"
-              >
-                Sign Up
-              </Button>
+                <Input
+                  isRequired
+                  className="max-w-md"
+                  label="Password"
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                />
+
+                {error && (
+                  <div className="text-red-500 text-sm text-center">{error}</div>
+                )}
+
+                <Button
+                  color="primary"
+                  variant="shadow"
+                  size="lg"
+                  type="submit"
+                  className="mt-2 font-semibold"
+                  isLoading={loading}
+                >
+                  Log In
+                </Button>
             </form>
           </div>
         </div>

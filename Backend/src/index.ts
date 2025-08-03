@@ -9,7 +9,7 @@ import './config/firebase'; // Inicializa Singleton
 
 const app = express();
 
-app.use(cors()) //Transforma el request body a json
+app.use(cors()) 
 app.use(express.json());
 app.use(fileUpload());
 // Rutas públicas
