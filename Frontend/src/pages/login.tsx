@@ -10,8 +10,6 @@ interface LoginFormData {
   password: string;
 }
 
-
-
 const auth = getAuth(app)
 
 export default function LoginPage() {
