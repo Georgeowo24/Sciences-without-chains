@@ -4,7 +4,6 @@ import * as admin from 'firebase-admin';
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const token = req.headers.authorization?.split('Bearer ')[1];
-    
     if (!token) {
         res.status(401).json({ error: 'Acceso no autorizado' });
         return ;

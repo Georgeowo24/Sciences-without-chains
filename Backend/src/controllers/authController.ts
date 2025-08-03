@@ -11,53 +11,60 @@ export const register = async (req: Request, res: Response) : Promise <void>=> {
         res.status(201).json({ uid: user.uid, email: user.email });
         return ;
     } catch (error) {
-        res.status(400).send('Error al crear usuario');
+        console.log(error)
+        res.status(400).send(`Error: ${error}`);
         return ;
     }
 };
 
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+// controllers/authController.ts
+export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-        res.status(400).json({ error: 'Email y contraseña requeridos' });
-        return ;
-    }
+    const FIREBASE_WEB_API_KEY = process.env.FIREBASE_WEB_API_KEY;
 
     try {
-        // 1. Verificar credenciales con Firebase Authentication
-        const user = await admin.auth().getUserByEmail(email);
-        
-        // 2. Generar token personalizado
-        const token = await admin.auth().createCustomToken(user.uid);
-        
-        // 3. Responder con el token
-        res.json({ 
-        uid: user.uid,
-        email: user.email,
-        token 
+        const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_WEB_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email,
+                password,
+                returnSecureToken: true
+            })
         });
-        return ;
-    } catch (error) {
-        handleAuthError(error, res);
-        return ;
+
+        const data = await response.json();
+
+        if (!response.ok) {
+        throw new Error(data.error.message);
+        }
+
+        // 2. Devolver tokens
+        res.json({
+            uid: data.localId,
+            email: data.email,
+            token: data.idToken,
+            refreshToken: data.refreshToken
+        });
+    } catch (error: any) {
+        handleAuthError(error.response.data.error, res);
     }
+};
+
+// Helper para manejar errores
+const handleAuthError = (error: any, res: Response) => {
+    const errorMap: Record<string, number> = {
+        EMAIL_NOT_FOUND: 404,
+        INVALID_PASSWORD: 401,
+        USER_DISABLED: 403,
+    };
+
+    const status = errorMap[error.message] || 400;
+    res.status(status).json({ error: error.message });
 };
 
 // Manejo de errores específicos de Firebase
-const handleAuthError = (error: any, res: Response) => {
-    switch (error.code) {
-        case 'auth/user-not-found':
-            res.status(404).json({ error: 'Usuario no registrado' });
-        case 'auth/wrong-password':
-            res.status(401).json({ error: 'Credenciales inválidas' });
-        case 'auth/invalid-email':
-            res.status(400).json({ error: 'Formato de email inválido' });
-        default:
-            res.status(500).json({ error: 'Error en el servidor' });
-    }
-};
 
 export const verifyToken = async (req: Request, res: Response): Promise<void> => {
     const token = req.headers.authorization?.split('Bearer ')[1] || "";
@@ -76,6 +83,7 @@ export const verifyToken = async (req: Request, res: Response): Promise<void> =>
         });
         return ;
     } catch (error) {
+        console.log(error)
         res.status(401).json({ error: 'Token inválido o expirado' });
         return ;
     }

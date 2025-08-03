@@ -1,7 +1,45 @@
 import { Input, Button, Link } from "@heroui/react";
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import app from '../firebase/firebase'
 import DefaultLayout from "@/layouts/default";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+
+
+const auth = getAuth(app)
 
 export default function LoginPage() {
+
+  const [form, setForm] = useState<LoginFormData>({ email: "", password: "" });
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      await signInWithEmailAndPassword(auth, form.email, form.password);
+      navigate("/"); // Redirige al home tras login exitoso
+    } catch (err: any) {
+      setError("Credenciales incorrectas o usuario no encontrado.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <DefaultLayout>
       <div className="flex items-center justify-center">
@@ -14,36 +52,48 @@ export default function LoginPage() {
               Log In
             </h2>
 
-            <form className="flex flex-col gap-6">
+            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
               <Input
                 isRequired
                 className="max-w-md"
                 label="Email"
                 type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
               />
 
-              <Input
-                isRequired
-                className="max-w-md"
-                label="Password"
-                type="password"
-              />
-              
-              <Button
-                color="primary"
-                variant="shadow"
-                size="lg"
-                className="mt-2 font-semibold"
-              >
-                Sign Up
-              </Button>
+                <Input
+                  isRequired
+                  className="max-w-md"
+                  label="Password"
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                />
+
+                {error && (
+                  <div className="text-red-500 text-sm text-center">{error}</div>
+                )}
+
+                <Button
+                  color="primary"
+                  variant="shadow"
+                  size="lg"
+                  type="submit"
+                  className="mt-2 font-semibold"
+                  isLoading={loading}
+                >
+                  Log In
+                </Button>
             </form>
           </div>
         </div>
         
         {/* Welcome */}
         <div className="w-1/2 text-left pl-30">
-          <h1 className="text-5xl font-bold p-30 pb-10">Hello, Welcome!</h1>
+          <h1 className="text-5xl font-bold p-30 pb-10">Welcome Back!</h1>
 
           <p className="pb-4">Don't have an account?</p>
           
