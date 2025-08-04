@@ -4,8 +4,6 @@ import FileProxy from '../proxies/fileProxy';
 import FileModel from '../models/fileModel';
 
 class CatalogController {
-    
-
     // Obtener todos los documentos (paginados)
     async getAllDocuments(req: Request, res: Response) {
         try {
@@ -55,7 +53,7 @@ class CatalogController {
     // Buscar documentos
     async searchDocuments(req: Request, res: Response): Promise<void> {
         try {
-            const term = req.query.term as string;
+            const term = req.params.term as string;
             if (!term) {
                 res.status(400).json({ error: 'Término de búsqueda requerido' });
                 return ;

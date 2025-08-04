@@ -11,7 +11,7 @@ router.get('/', catalogController.getAllDocuments);
 router.get('/category/:category', catalogController.getDocumentsByCategory);
 
 // Buscar documentos por término
-router.get('/search', catalogController.searchDocuments);
+router.get('/search/:term', catalogController.searchDocuments);
 
 // Obtener detalles de un documento específico
 router.get('/:id', catalogController.getDocumentDetails);

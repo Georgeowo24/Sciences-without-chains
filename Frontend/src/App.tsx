@@ -8,6 +8,7 @@ import DocsPage from "./pages/docs";
 import SignUpPage from "./pages/signUp";
 import UploadDocsPage from "./pages/uploadDocs";
 import HelpPage from "./pages/help";
+import SearchPage from "./pages/search";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       <Route element={<SignUpPage/>}  path="/signUp"/>
       <Route element={<UploadDocsPage/>}  path="/uploadDocs"/>
       <Route element={<HelpPage/>}  path="/help"/>
+      <Route element={<SearchPage/>}  path="/search/:term"/>
     </Routes>
   );
 }
