@@ -17,7 +17,7 @@ function App() {
       <Route element={<CategoriesPage />} path="/categories" />
       <Route element={<AboutPage />} path="/about" />
       <Route element={<LoginPage/>}  path="/login"/>
-      <Route element={<DocsPage/>}  path="/docs"/>
+      <Route element={<DocsPage/>}  path="/document/:id"/>
       <Route element={<SignUpPage/>}  path="/signUp"/>
       <Route element={<UploadDocsPage/>}  path="/uploadDocs"/>
       <Route element={<HelpPage/>}  path="/help"/>

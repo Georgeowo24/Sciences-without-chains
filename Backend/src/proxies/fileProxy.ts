@@ -8,14 +8,14 @@ class FileProxy {
     constructor(private fileModel: IFileModel) {}
 
     async uploadFile(fileData: Partial<IArchivo>, user: any): Promise<IArchivo> {
-    // Validaciones adicionales
+        // Validaciones adicionales
         if (!fileData.nombre || !fileData.categoria) {
         throw new Error('Nombre y categoría son requeridos');
         }
         
         return this.fileModel.createFile({
         ...fileData,
-        usuario: user.uid
+        usuario: user.email
         }) as Promise<IArchivo>;
     }
 

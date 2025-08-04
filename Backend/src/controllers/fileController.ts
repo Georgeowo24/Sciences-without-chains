@@ -25,10 +25,6 @@ class FileController {
 
             const file = req.files.file as UploadedFile;
 
-            // Asegúrate de que la carpeta exista (opcional)
-            // import { existsSync, mkdirSync } from 'fs';
-            // if (!existsSync(this.uploadPath)) mkdirSync(this.uploadPath, { recursive: true });
-
             const uploadPath = path.join(this.uploadPath, file.name);
             await file.mv(uploadPath);
 

@@ -4,16 +4,31 @@ import { Button, Link } from "@heroui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import app from "@/firebase/firebase";
+
 
 interface DocumentData {
-  _id: string;
+  id: string;
   nombre: string;
-  descripcion?: string;
+  descripcion: string;
   categoria: string;
+  usuario: string;
   direccionDoc: string;
 }
 
 export default function CategoriesPage() {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+
   const { category } = useParams<{ category?: string }>();
   const [documents, setDocuments] = useState<DocumentData[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,16 +62,19 @@ export default function CategoriesPage() {
           {category ? category.toUpperCase() : "TODAS LAS CATEGORÍAS"}
         </h1>
 
-        <Button
-          as={Link}
-          href="/uploadDocs"
-          color="primary"
-          variant="shadow"
-          size="md"
-          className="mb-8"
-        >
-          Upload a new document
-        </Button>
+        {user && (
+          <Button
+            as={Link}
+            href="/uploadDocs"
+            color="primary"
+            variant="shadow"
+            size="md"
+            className="mb-8"
+          >
+            Upload a new document
+          </Button>
+        )}
+
 
         {loading && <div className="text-center">Cargando documentos...</div>}
         {error && <div className="text-red-500 text-center">{error}</div>}
@@ -65,7 +83,7 @@ export default function CategoriesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-6xl w-full">
           {documents.map((doc) => (
             <div
-              key={doc._id}
+              key={doc.id}
               className="bg-gray-200 dark:bg-gray-800 rounded-xl p-6 flex items-start gap-4 shadow-md"
             >
               {/* Icono PDF */}
@@ -82,19 +100,25 @@ export default function CategoriesPage() {
                 <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
                   {doc.nombre}
                 </h3>
+
                 <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                  {doc.descripcion || "Sin descripción"}
+                  {doc.descripcion || "Without description"}
                 </p>
+
+
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                  Subido por: {doc.usuario}
+                </p>
+
                 <div className="flex gap-1">
                   <Button
-                    color="primary"
                     as={Link}
-                    href={`http://localhost:3000${doc.direccionDoc}`}
+                    href={`/document/${doc.id}`}
+                    color="primary"
                     variant="shadow"
                     radius="sm"
-                    target="_blank"
                   >
-                    Ver documento
+                    View Document
                   </Button>
                 </div>
               </div>

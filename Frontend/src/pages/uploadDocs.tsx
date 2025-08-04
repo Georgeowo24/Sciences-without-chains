@@ -16,6 +16,7 @@ export const categories = [
 
 export default function UploadDocsPage() {
     const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [category, setCategory] = useState<string>("");
     const [loading, setLoading] = useState(false);
@@ -60,14 +61,17 @@ export default function UploadDocsPage() {
             formData.append("file", file);
             formData.append("nombre", title);
             formData.append("categoria", category);
+            formData.append("descripcion", description);
+
             
             const userInfo = {
                 uid: user.uid,
                 email: user.email,
                 displayName: user.displayName,
             };
+            
             formData.append("user", JSON.stringify(userInfo));
-            console.log("Form data prepared:", formData.getAll("file"), title, category, userInfo);
+            console.log("Form data prepared:", formData.getAll("file"), title, description, category, userInfo);
             await axios.post("http://localhost:3000/files/upload", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -101,6 +105,15 @@ export default function UploadDocsPage() {
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                         />
+
+                        <Input
+                        className="w-96 max-w-full"
+                        label="Description (optional)"
+                        type="text"
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        />
+
                         <Input
                             isRequired
                             className="w-96 max-w-full"
