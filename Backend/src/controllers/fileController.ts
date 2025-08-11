@@ -44,7 +44,6 @@ class FileController {
             if (!res.headersSent) {
                 return res.status(500).send('Error al subir archivo');
             }
-            return res.status(500).send("Error")
         }
     }
 
