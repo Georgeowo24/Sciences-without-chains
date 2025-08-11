@@ -19,8 +19,7 @@ class FileController {
     async uploadFile(req: Request, res: Response): Promise<void> {
         try {
             if (!req.files || !req.files.file || !req.body.categoria) {
-                res.status(400).send('Archivo no proporcionado');
-                return;
+                return res.status(400).send('Archivo no proporcionado');
             }
 
             const file = req.files.file as UploadedFile;
@@ -39,14 +38,13 @@ class FileController {
             };
 
             const result = await FileProxy.uploadFile(fileData, req.body.user);
-            res.status(201).json(result);
-            return;
+            return res.status(201).json(result);
         } catch (error) {
             console.error('Error al subir archivo:', error);
             if (!res.headersSent) {
-                res.status(500).send('Error al subir archivo');
+                return res.status(500).send('Error al subir archivo');
             }
-            return;
+            return res.status(500).send("Error")
         }
     }
 
