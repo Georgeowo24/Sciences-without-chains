@@ -9,7 +9,7 @@ import './config/firebase'; // Inicializa Singleton
 const app = express();
 
 app.use(cors({
-    origin: 'https://your-firebase-app.web.app'
+    origin: 'https://sciencewchainsdb.web.app/'
 })) 
 app.use(express.json());
 app.use(fileUpload());
